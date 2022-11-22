@@ -5,70 +5,76 @@ import java.util.Scanner;
 public class FCFSnSJFNP {
 	
 	public void fcfs() {
-	       System.out.println("Enter the number of process");
-	        Scanner in = new Scanner(System.in);
-	        int numberOfProcesses = in.nextInt();
-	        int avgw=0;
-	        int pid[] = new int[numberOfProcesses];
-	        int bt[] = new int[numberOfProcesses];
-	        int ar[] = new int[numberOfProcesses];
-	        int ct[] = new int[numberOfProcesses];
-	        int ta[] = new int[numberOfProcesses];
-	        int wt[] = new int[numberOfProcesses];
+	       Scanner sc = new Scanner(System.in);
+System.out.println("enter no of process: ");
+int n = sc.nextInt();
+int pid[] = new int[n];   // process ids
+int ar[] = new int[n];     // arrival times
+int bt[] = new int[n];     // burst or execution times
+int ct[] = new int[n];     // completion times
+int ta[] = new int[n];     // turn around times
+int wt[] = new int[n];     // waiting times
+int temp;
+float avgwt=0,avgta=0;
+ 
+for(int i = 0; i < n; i++)
+{
+System.out.println("enter process " + (i+1) + " arrival time: ");
+ar[i] = sc.nextInt();
+System.out.println("enter process " + (i+1) + " brust time: ");
+bt[i] = sc.nextInt();
+pid[i] = i+1;
+}
+ 
+//sorting according to arrival times
+for(int i = 0 ; i <n; i++)
+{
+for(int  j=0;  j < n-(i+1) ; j++)
+{
+if( ar[j] > ar[j+1] )
+{
+temp = ar[j];
+ar[j] = ar[j+1];
+ar[j+1] = temp;
+temp = bt[j];
+bt[j] = bt[j+1];
+bt[j+1] = temp;
+temp = pid[j];
+pid[j] = pid[j+1];
+pid[j+1] = temp;
+}
+}
+}
+// finding completion times
+for(int  i = 0 ; i < n; i++)
+{
+if( i == 0)
+{
+ct[i] = ar[i] + bt[i];
+}
+else
+{
+if( ar[i] > ct[i-1])
+{
+ct[i] = ar[i] + bt[i];
+}
+else
+ct[i] = ct[i-1] + bt[i];
+}
+ta[i] = ct[i] - ar[i] ;          // turnaround time= completion time- arrival time
+wt[i] = ta[i] - bt[i] ;          // waiting time= turnaround time- burst time
+avgwt += wt[i] ;               // total waiting time
+avgta += ta[i] ;               // total turnaround time
+}
+System.out.println("\npid  arrival  brust  complete turn waiting");
+for(int  i = 0 ; i< n;  i++)
+{
+System.out.println(pid[i] + "  \t " + ar[i] + "\t" + bt[i] + "\t" + ct[i] + "\t" + ta[i] + "\t"  + wt[i] ) ;
+}
+sc.close();
+System.out.println("\naverage waiting time: "+ (avgwt/n));     // printing average waiting time.
+System.out.println("average turnaround time:"+(avgta/n));    // printing average turnaround time.
 
-	        for(int i = 0; i < numberOfProcesses; i++) {
-	            System.out.println("Enter process " + (i+1) + " arrival time: ");
-	            ar[i] = in.nextInt();
-	            System.out.println("Enter process " + (i+1) + " brust time: ");
-	            bt[i] = in.nextInt();
-	            pid[i] = i+1;
-	        }
-	        int temp;
-	        for (int i = 0; i < numberOfProcesses; i++) {
-	            for (int j = i+1; j < numberOfProcesses; j++) {
-
-	                if(ar[i] > ar[j]) {
-	                    temp = ar[i];
-	                    ar[i] = ar[j];
-	                    ar[j] = temp;
-
-	                    temp = pid[i];
-	                    pid[i] = pid[j];
-	                    pid[j] = temp;
-	                    
-	                    temp = bt[i];
-	                    bt[i] = bt[j];
-	                    bt[j] = temp;
-	                }
-	            }
-	        }
-
-	        
-	        ct[0] = bt[0] + ar[0];
-	        for(int i = 1; i < numberOfProcesses; i++) {
-	            ct[i] = ct[i - 1] + bt[i];
-	        }
-	        for(int i = 0; i < numberOfProcesses; i++) {
-	            ta[i] = ct[i] - ar[i];
-	            wt[i] = ta[i] - bt[i];
-	        }
-	       
-	        
-	        System.out.println("Process\t\tAT\t\tBT\t\tCT\t\tTAT\t\tWT");
-	        for(int i = 0; i < numberOfProcesses; i++) {
-	            System.out.println(pid[i]+"\t\t\t" + ar[i] + "\t\t" + bt[i]+ "\t\t" + ct[i]+ "\t\t" + ta[i]+ "\t\t" + wt[i]);
-	        }
-
-	        System.out.println("gantt chart: ");
-	        for(int i = 0; i < numberOfProcesses; i++) {
-	            System.out.print("P" + pid[i] +" ");
-	        }
-	        
-	        for(int i = 0; i < ar.length; i++) {    	
-	            avgw+=wt[i];          
-	        }
-	        
-	 System.out.print("agw " +avgw/numberOfProcesses);
 	    }
 	
 	
