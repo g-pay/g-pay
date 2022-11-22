@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class FCFSnPRIORITY {
+public class FCFSnPRIORITYNP {
 	public void fcfs() {
 	       System.out.println("Enter the number of process");
 	        Scanner in = new Scanner(System.in);
