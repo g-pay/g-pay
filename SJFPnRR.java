@@ -112,124 +112,95 @@ public class SJFPnRR {
 	
 
 	void rr() {
-		Scanner inp = new Scanner(System.in);
-		int n, tq, timer = 0, maxProccessIndex = 0;
-		float avgWait = 0, avgTT = 0;
-		System.out.print("\nEnter the time quanta : ");
-		tq = inp.nextInt();
-		System.out.print("\nEnter the number of processes : ");
-		n = inp.nextInt();
-		int arrival[] = new int[n];
-		int burst[] = new int[n];
-		int wait[] = new int[n];
-		int turn[] = new int[n];
-		int queue[] = new int[n];
-		int temp_burst[] = new int[n];
-		boolean complete[] = new boolean[n];
-		System.out.print("\nEnter the arrival time of the processes : ");
-		for (int i = 0; i < n; i++)
-			arrival[i] = inp.nextInt();
-		System.out.print("\nEnter the burst time of the processes : ");
-		for (int i = 0; i < n; i++) {
-			burst[i] = inp.nextInt();
-			temp_burst[i] = burst[i];
-		}
-		for (int i = 0; i < n; i++) {
-			complete[i] = false;
-			queue[i] = 0;
-		}
-		while (timer < arrival[0])
-			timer++;
-		queue[0] = 1;
-		while (true) {
-			boolean flag = true;
-			for (int i = 0; i < n; i++) {
-				if (temp_burst[i] != 0) {
-					flag = false;
-					break;
-				}
-			}
-			if (flag)
-				break;
-			for (int i = 0; (i < n) && (queue[i] != 0); i++) {
-				int ctr = 0;
-				while ((ctr < tq) && (temp_burst[queue[0] - 1] > 0)) {
-					temp_burst[queue[0] - 1] -= 1;
-					timer += 1;
-					ctr++;
-					checkNewArrival(timer, arrival, n, maxProccessIndex, queue);
-				}
-				if ((temp_burst[queue[0] - 1] == 0) && (complete[queue[0] - 1] == false)) {
-					turn[queue[0] - 1] = timer;
-					complete[queue[0] - 1] = true;
-				}
-				boolean idle = true;
-				if (queue[n - 1] == 0) {
-					for (int k = 0; k < n && queue[k] != 0; k++) {
-						if (complete[queue[k] - 1] == false) {
-							idle = false;
-						}
-					}
-				} else
-					idle = false;
-				if (idle) {
-					timer++;
-					checkNewArrival(timer, arrival, n, maxProccessIndex, queue);
-				}
-				queueMaintainence(queue, n);
-			}
-		}
-		for (int i = 0; i < n; i++) {
-			turn[i] = turn[i] - arrival[i];
-			wait[i] = turn[i] - burst[i];
-		}
-		System.out.print("\nProgram No.\tArrival Time\tBurst Time\tWait Time\tTurnAroundTime" + "\n");
-		for (int i = 0; i < n; i++) {
-			System.out.print(
-					i + 1 + "\t\t" + arrival[i] + "\t\t" + burst[i] + "\t\t" + wait[i] + "\t\t" + turn[i] + "\n");
-		}
-		for (int i = 0; i < n; i++) {
-			avgWait += wait[i];
-			avgTT += turn[i];
-		}
-		System.out.print("\nAverage wait time : " + (avgWait / n) + "\nAverage Turn Around Time : " + (avgTT / n));
-	}
+Scanner sc = new Scanner(System.in);
+        System.out.println("Enter no of processes");
+        int n = sc.nextInt();
+        int at[] = new int[n];
+        int bt[] = new int[n];
+        int pid[] = new int[n];
+        int ct[] = new int[n];
+        int wt[] = new int[n];
+        int tat[] = new int[n];
+        int remtime[] = new int[n];
+        int tq,total;
+        float avgtat = 0,avgwt = 0;
 
-	public static void queueUpdation(int queue[], int timer, int arrival[], int n, int maxProccessIndex) {
-		int zeroIndex = -1;
-		for (int i = 0; i < n; i++) {
-			if (queue[i] == 0) {
-				zeroIndex = i;
-				break;
-			}
-		}
-		if (zeroIndex == -1)
-			return;
-		queue[zeroIndex] = maxProccessIndex + 1;
-	}
+        for (int i = 0; i < n; i++) {
+            System.out.println("Process "+(i + 1) + " Arrival Time:");
+            at[i] = sc.nextInt();
+            System.out.println("Process "+(i + 1) + " Burst Time:");
+            bt[i] = sc.nextInt();
+            remtime[i] = bt[i];
+            wt[i] = 0;
+            pid[i] = i+1;
+        }
 
-	public static void checkNewArrival(int timer, int arrival[], int n, int maxProccessIndex, int queue[]) {
-		if (timer <= arrival[n - 1]) {
-			boolean newArrival = false;
-			for (int j = (maxProccessIndex + 1); j < n; j++) {
-				if (arrival[j] <= timer) {
-					if (maxProccessIndex < j) {
-						maxProccessIndex = j;
-						newArrival = true;
-					}
-				}
-			}
-			if (newArrival)
-				queueUpdation(queue, timer, arrival, n, maxProccessIndex);
-		}
-	}
+        System.out.println("Enter Value of Time Quantum");
+        tq = sc.nextInt();
 
-	public static void queueMaintainence(int queue[], int n) {
-		for (int i = 0; (i < n - 1) && (queue[i + 1] != 0); i++) {
-			int temp = queue[i];
-			queue[i] = queue[i + 1];
-			queue[i + 1] = temp;
-		}
+        int rp=n;
+        int time=0;
+        int i=0;
+        System.out.println("0");
+        wt[0] = 0;
+        while (rp!=0) {
+            if (remtime[i] > tq) {
+                remtime[i] = remtime[i] - tq;
+                System.out.println(" | Process ["+(i+1)+"]  | ");
+                time = time + tq;
+                System.out.println(time);
+            }
+            else if(remtime[i] <= tq && remtime[i]>0)
+            {
+                time = time + remtime[i];
+                remtime[i] = remtime[i] - remtime[i];
+                System.out.println(" | Process ["+(i+1)+"]  | ");
+                rp--;
+                wt[i] = time - bt[i];
+                System.out.println(time);
+            }
+            i++;
+            if(i==n){
+                i=0;
+            }
+        }
+        // Finding completion times
+        for (i = 0; i < n; i++) {
+            if(i == 0)
+            {
+                ct[i] = at[i] + bt[i];
+            }
+            else
+            {
+                if(at[i] > ct[i-1])
+                {
+                    ct[i] = at[i] + bt[i];
+                }
+                else
+                {
+                    ct[i] = ct[i-1] + bt[i];
+                }
+                
+                // tat[i] = bt[i] - wt[i];
+            }
+    
+
+        }
+        for (i = 0; i < n ; i++)
+        {
+            tat[i] = bt[i] + wt[i];
+            avgwt += wt[i];
+            avgtat +=tat[i];
+        }
+        System.out.println("\n PID ARRIVAL BURST  TAT WAITING");
+        for (i = 0; i < n; i++) {
+            System.out.println(pid[i] + " \t "+at[i] + "\t" + bt[i] + "\t" + tat[i] + "\t" + wt[i]);
+        }
+        System.out.println("\n Average Waiting Time: "+(avgwt/n));
+        System.out.println("\n Average Turn Around Time: "+(avgtat/n));
+        sc.close();
+
+
 	}
 
 	public static void main(String args[]) throws NumberFormatException, IOException {
