@@ -110,7 +110,6 @@ public class FCFSnPRIORITY {
 
         System.out.println(Arrays.toString(priority));
 
-// Sorting process &amp; burst time by priority
 int temp;
 String temp2;
 for (int i = 0; i < numberOfProcess - 1; i++) {
@@ -144,7 +143,7 @@ for(int i = 1; i < numberOfProcess; i++) {
         int TAT[] = new int[numberOfProcess];
         int waitingTime[] = new int[numberOfProcess];
 
-// Calculating Waiting Time &amp; Turn Around Time
+
         for (int i = 0; i <numberOfProcess; i++) {
             TAT[i] = ct[i] - ar[i];
             waitingTime[i] = TAT[i] - burstTime[i];
