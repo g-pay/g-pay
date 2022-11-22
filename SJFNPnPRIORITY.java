@@ -125,7 +125,7 @@ public class SJFNPnPRIORITY{
 		String temp2;
 		for (int i = 0; i < numberOfProcess - 1; i++) {
 			for (int j = 0; j < numberOfProcess - 1; j++) {
-				if (priority[j] < priority[j + 1]) {
+				if (priority[j] > priority[j + 1]) {
 					temp = priority[j];
 					priority[j] = priority[j + 1];
 					priority[j + 1] = temp;
